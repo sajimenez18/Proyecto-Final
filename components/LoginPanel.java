@@ -105,16 +105,11 @@ public class LoginPanel {
                 String entradaContra = new String(entradaContraseña.getPassword());
 
                 if (new LoginControl().validacionDatos(entradaUsuario, entradaContra)) {
-                    Component comp = (Component) e.getSource();
-                    JFrame ventanaPapa = (JFrame) SwingUtilities.getWindowAncestor(comp);
-                    ventanaPapa.dispose();
-                    new InicioSecion();
-                } else {
-                    JOptionPane.showMessageDialog(panelLogin, 
-                            "Credenciales incorrectas", 
-                            "Error", 
-                            JOptionPane.ERROR_MESSAGE);
-                }
+                Component comp = (Component) e.getSource();
+                JFrame ventanaPapa = (JFrame) SwingUtilities.getWindowAncestor(comp);
+                ventanaPapa.dispose();
+                new InicioSecion(entradaUsuario); // 🔹 pasamos el usuario
+            }
             }
         });
     }
