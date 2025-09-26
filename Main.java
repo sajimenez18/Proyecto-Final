@@ -21,9 +21,9 @@ public class Main {
         Header header = new Header("Agenda de Tareas", "Iniciar Sesión");
         ventana.add(header, BorderLayout.NORTH);
 
-        LoginPanel panelLogin = new LoginPanel();
-        ventana.add(panelLogin.getJPanel(), BorderLayout.CENTER);
-            
+        LoginPanel loginPanel = new LoginPanel(ventana);
+        ventana.add(loginPanel.getJPanel(), BorderLayout.CENTER);
+
         ventana.setVisible(true);
     }
 }

@@ -1,23 +1,20 @@
 package components;
 
+import module.BotonLogin;   // 👈 importa tu botón
 import javax.swing.*;
-import views.InicioSecion;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import control.LoginControl;
 
 public class LoginPanel {
 
     private JPanel panelLogin;
+    private JTextField entradaCorreo;       // 👈 ahora atributos
+    private JPasswordField entradaContraseña;
 
-    public LoginPanel() { 
-        // Panel contenedor principal
+    public LoginPanel(JFrame ventana) {      // 👈 recibe la ventana para pasársela al botón
         panelLogin = new JPanel(new GridBagLayout());
         panelLogin.setBackground(new Color(240, 240, 240));
         panelLogin.setPreferredSize(new Dimension(500, 500));
 
-        // Panel tipo tarjeta
         JPanel cardPanel = new JPanel(new GridBagLayout());
         cardPanel.setBackground(Color.WHITE);
         cardPanel.setPreferredSize(new Dimension(350, 320));
@@ -52,7 +49,7 @@ public class LoginPanel {
         cardPanel.add(lblUsuario, gbc);
 
         // ===== Campo Usuario =====
-        JTextField entradaCorreo = new JTextField();
+        entradaCorreo = new JTextField();
         entradaCorreo.setPreferredSize(new Dimension(200, 35));
         entradaCorreo.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         gbc.gridx = 1;
@@ -68,7 +65,7 @@ public class LoginPanel {
         cardPanel.add(lblContra, gbc);
 
         // ===== Campo Contraseña =====
-        JPasswordField entradaContraseña = new JPasswordField();
+        entradaContraseña = new JPasswordField();
         entradaContraseña.setPreferredSize(new Dimension(200, 35));
         entradaContraseña.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         gbc.gridx = 1;
@@ -76,45 +73,27 @@ public class LoginPanel {
         cardPanel.add(entradaContraseña, gbc);
 
         // ===== Botón Ingresar =====
-        JButton btnIngresar = new JButton("Ingresar");
-        btnIngresar.setPreferredSize(new Dimension(120, 40));
-        btnIngresar.setBackground(new Color(60, 130, 200));
-        btnIngresar.setForeground(Color.WHITE);
-        btnIngresar.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        btnIngresar.setFocusPainted(false);
-        btnIngresar.setBorderPainted(false);
-        btnIngresar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        JButton btnIngresar = BotonLogin.crear(entradaCorreo, entradaContraseña, ventana);
         gbc.gridx = 1;
         gbc.gridy = 3;
         gbc.anchor = GridBagConstraints.EAST;
         gbc.fill = GridBagConstraints.NONE;
         cardPanel.add(btnIngresar, gbc);
 
-        // Añadir cardPanel centrado en panelLogin
-        GridBagConstraints gbcMain = new GridBagConstraints();
-        gbcMain.gridx = 0;
-        gbcMain.gridy = 0;
-        gbcMain.anchor = GridBagConstraints.CENTER;
-        panelLogin.add(cardPanel, gbcMain);
-
-        // Acción del botón
-        btnIngresar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String entradaUsuario = entradaCorreo.getText();
-                String entradaContra = new String(entradaContraseña.getPassword());
-
-                if (new LoginControl().validacionDatos(entradaUsuario, entradaContra)) {
-                Component comp = (Component) e.getSource();
-                JFrame ventanaPapa = (JFrame) SwingUtilities.getWindowAncestor(comp);
-                ventanaPapa.dispose();
-                new InicioSecion(entradaUsuario); // 🔹 pasamos el usuario
-            }
-            }
-        });
+        // añade la tarjeta al panel principal
+        panelLogin.add(cardPanel);
     }
 
     public JPanel getJPanel() {
         return panelLogin;
+    }
+
+    // opcional: getters de los campos
+    public JTextField getEntradaCorreo() {
+        return entradaCorreo;
+    }
+
+    public JPasswordField getEntradaContraseña() {
+        return entradaContraseña;
     }
 }

@@ -1,20 +1,24 @@
 package views;
 
+// Importamos nuestra clase Header para usar un encabezado personalizado
 import components.Header;
 
-import javax.swing.*;          
-import java.awt.*;             
+import javax.swing.*;          // Librería Swing para crear ventanas, botones, paneles, etc.
+import java.awt.*;             // Librería AWT para colores, layouts, etc.
 import java.text.SimpleDateFormat; // Para formatear fechas
 import java.util.ArrayList;    // Lista dinámica
 import java.util.Date;         // Para manejar fechas
 import java.util.List;         // Interfaz de listas
 
-// Clase para las tareas, cada tarea tiene título, descripción, prioridad y fecha límite
+// -------------------
+// Clase que representa una tarea
+// Cada tarea tiene título, descripción, prioridad y fecha límite
+// -------------------
 class Tarea {
-    private String titulo;      
-    private String descripcion;  
-    private String prioridad;    
-    private Date fechaLimite;    
+    private String titulo;       // Título de la tarea, ejemplo: "Comprar pan"
+    private String descripcion;  // Descripción de la tarea, ejemplo: "Ir a la panadería a comprar pan integral"
+    private String prioridad;    // Prioridad de la tarea: Alta, Media o Baja
+    private Date fechaLimite;    // Fecha límite para completar la tarea
 
     // Constructor: se usa para crear un objeto Tarea con todos sus atributos
     public Tarea(String titulo, String descripcion, String prioridad, Date fechaLimite) {
@@ -24,7 +28,10 @@ class Tarea {
         this.fechaLimite = fechaLimite;
     }
 
-    // Getters y setters para obtener o cambiar los valores de cada atributo
+    // -------------------
+    // Getters y setters
+    // Estos métodos permiten obtener o cambiar los valores de cada atributo
+    // -------------------
     public String getTitulo() { return titulo; }
     public void setTitulo(String titulo) { this.titulo = titulo; }
 
@@ -38,7 +45,11 @@ class Tarea {
     public void setFechaLimite(Date fechaLimite) { this.fechaLimite = fechaLimite; }
 }
 
-// Clase Agenda esta clase es como un “contenedor” de tareas. Permite agregar, eliminar, editar y obtener todas las tareas
+// -------------------
+// Clase Agenda
+// Esta clase es como un “contenedor” de tareas. 
+// Permite agregar, eliminar, editar y obtener todas las tareas
+// -------------------
 class Agenda {
     private List<Tarea> tareas;  // Creamos una lista para almacenar las tareas
 
@@ -66,34 +77,51 @@ class Agenda {
 // -------------------
 public class InicioSecion {
 
-    private JFrame ventana;      
+    private JFrame ventana;       // Ventana principal de la aplicación
     private JPanel panelTareas;   // Panel donde se mostrarán las tarjetas de las tareas
     private Agenda agenda;        // Objeto Agenda que controla la lista de tareas
+    private Header header;        // Header personalizado para mostrar el nombre del usuario
+
+    // Constructor por defecto (para cuando se llama desde main sin usuario)
+    public InicioSecion() {
+        this(""); // Llama al otro constructor con usuario vacío
+    }
 
     // Nuevo constructor que recibe el nombre del usuario
     public InicioSecion(String usuario) {
+        agenda = new Agenda(); // Creamos nuestra lista de tareas vacía
+
+        // -------------------
+        // Configuración de la ventana principal
+        // -------------------
         ventana = new JFrame("Agenda Avanzada");
         ventana.setExtendedState(JFrame.MAXIMIZED_BOTH);
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         ventana.setLayout(new BorderLayout());
         ventana.getContentPane().setBackground(new Color(240, 240, 240));
 
-        agenda = new Agenda();
-
-        // Header con textos personalizados
-        Header header = new Header("Agenda de Tareas", "Bienvenido " + usuario);
+        // -------------------
+        // Header personalizado
+        // Si usuario está vacío, ponemos "Iniciar Sesión", sino "Bienvenido, usuario"
+        // -------------------
+        String textoDerecho = usuario.isEmpty() ? "Iniciar Sesión" : "Bienvenido, " + usuario;
+        header = new Header("Agenda de Tareas", textoDerecho);
         ventana.add(header, BorderLayout.NORTH);
 
+        // -------------------
         // Panel central donde se mostrarán las tarjetas de cada tarea
+        // -------------------
         panelTareas = new JPanel();
         panelTareas.setLayout(new GridLayout(0, 1, 10, 10));
         JScrollPane scroll = new JScrollPane(panelTareas);
         scroll.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         ventana.add(scroll, BorderLayout.CENTER);
 
+        // -------------------
         // Panel inferior con botones
         // Botones: Nueva tarea, Editar tarea, Eliminar tarea
-        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10)); //Coloca los componentes de forma horizontal
+        // -------------------
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
         JButton btnNueva = new JButton("Nueva tarea");
         JButton btnEditar = new JButton("Editar tarea");
         JButton btnEliminar = new JButton("Eliminar tarea");
@@ -102,7 +130,9 @@ public class InicioSecion {
         panelBotones.add(btnEliminar);
         ventana.add(panelBotones, BorderLayout.SOUTH);
 
+        // -------------------
         // Acciones de los botones
+        // -------------------
         btnNueva.addActionListener(e -> abrirDialogo(-1)); // Crear nueva tarea
         btnEditar.addActionListener(e -> {                 // Editar tarea seleccionada
             int fila = seleccionarTarea();
@@ -119,12 +149,16 @@ public class InicioSecion {
             }
         });
 
-        // Mostrar la ventana 
+        // -------------------
+        // Mostrar la ventana al final para que todo esté cargado
+        // -------------------
         ventana.setVisible(true);
     }
 
+    // -------------------
     // Método para abrir el diálogo de crear o editar tarea
     // indexEditar = -1 -> crear nueva, >=0 -> editar tarea existente
+    // -------------------
     private void abrirDialogo(int indexEditar) {
         JDialog dialog = new JDialog(ventana, "Tarea", true);
         dialog.setSize(400, 350);
@@ -179,7 +213,9 @@ public class InicioSecion {
         dialog.setVisible(true);
     }
 
+    // -------------------
     // Método que actualiza el panel de tareas
+    // -------------------
     private void actualizarPanel() {
         panelTareas.removeAll();
         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
@@ -213,8 +249,10 @@ public class InicioSecion {
         panelTareas.repaint();
     }
 
+    // -------------------
     // Método para seleccionar una tarea usando un diálogo
     // Retorna el índice de la tarea seleccionada
+    // -------------------
     private int seleccionarTarea() {
         String[] opciones = new String[agenda.getTareas().size()];
         for (int i = 0; i < agenda.getTareas().size(); i++) {
@@ -231,8 +269,10 @@ public class InicioSecion {
         return -1;
     }
 
-    // Inicia la aplicación
+    // -------------------
+    // Método main: inicia la aplicación
+    // -------------------
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new InicioSecion(""));
+        SwingUtilities.invokeLater(() -> new InicioSecion()); // Inicia GUI en hilo seguro
     }
 }
