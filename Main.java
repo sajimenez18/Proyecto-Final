@@ -1,29 +1,12 @@
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import java.awt.*;
-
-import components.*;
-
-// Importamos nuestra clase del botón
-import module.BotonLogin;
+import javax.swing.SwingUtilities;
+import views.*;
 
 public class Main {
-
     public static void main(String[] args) {
+        System.out.println("Iniciando Agenda Tareas");
 
-        JFrame ventana = new JFrame("Agenda de tareas");
-        ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        ventana.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        ventana.setLayout(new BorderLayout());
-        ventana.setLocationRelativeTo(null);
-
-        // Header con textos personalizados
-        Header header = new Header("Agenda de Tareas", "Iniciar Sesión");
-        ventana.add(header, BorderLayout.NORTH);
-
-        LoginPanel loginPanel = new LoginPanel(ventana);
-        ventana.add(loginPanel.getJPanel(), BorderLayout.CENTER);
-
-        ventana.setVisible(true);
+        SwingUtilities.invokeLater(() -> {
+            new LoginView();
+        });
     }
 }
