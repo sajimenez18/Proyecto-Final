@@ -6,7 +6,6 @@ import java.time.LocalTime;
 
 public class HistorialDataBase {
     private static final String RUTA_HISTORIAL_TAREAS = "database/historialTareas.txt";
-    private static final String RUTA_HISTORIAL_ALARMAS = "database/historialAlarmas.txt";
 
     // Crear carpeta database si no existe
     static {
@@ -25,11 +24,6 @@ public class HistorialDataBase {
     public static void guardarEdicionTarea(String tituloAnterior, String tituloNuevo, String prioridad) {
         String accion = "EDITADA (antes: " + tituloAnterior + ")";
         guardarEnArchivo(RUTA_HISTORIAL_TAREAS, accion, tituloNuevo, prioridad, "");
-    }
-
-    // Método para guardar acciones de alarmas
-    public static void guardarAccionAlarma(String descripcion, String estado) {
-        guardarEnArchivo(RUTA_HISTORIAL_ALARMAS, estado, descripcion, "", "");
     }
 
     // Método genérico para guardar en archivo
@@ -54,11 +48,6 @@ public class HistorialDataBase {
     // Método para leer historial de tareas
     public static String leerHistorialTareas() {
         return leerArchivo(RUTA_HISTORIAL_TAREAS, "TAREAS");
-    }
-
-    // Método para leer historial de alarmas
-    public static String leerHistorialAlarmas() {
-        return leerArchivo(RUTA_HISTORIAL_ALARMAS, "ALARMAS");
     }
 
     // Método genérico para leer archivos
@@ -86,10 +75,6 @@ public class HistorialDataBase {
     // Método para limpiar historial (opcional)
     public static void limpiarHistorialTareas() {
         limpiarArchivo(RUTA_HISTORIAL_TAREAS);
-    }
-
-    public static void limpiarHistorialAlarmas() {
-        limpiarArchivo(RUTA_HISTORIAL_ALARMAS);
     }
 
     private static void limpiarArchivo(String ruta) {

@@ -73,6 +73,7 @@ public class LoginPanel {
         cardPanel.add(entradaContraseña, gbc);
 
         // ===== Botón Ingresar =====
+        // Aquí se crea un botón con la clase BotonLogin
         JButton btnIngresar = BotonLogin.crear(entradaCorreo, entradaContraseña, ventana);
         gbc.gridx = 1;
         gbc.gridy = 3;

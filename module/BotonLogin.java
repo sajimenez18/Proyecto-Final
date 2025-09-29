@@ -27,8 +27,10 @@ public class BotonLogin {
                 String entradaUsuario = emailField.getText();
                 String entradaContra = new String(passwordField.getPassword());
 
+                // Llama a LoginControl
                 if (new LoginControl().validacionDatos(entradaUsuario, entradaContra)) {
                     ventana.dispose();
+                    // Abre la vista InicioSecion
                     new InicioSecion(entradaUsuario);
                 } else {
                     JOptionPane.showMessageDialog(btnIngresar,

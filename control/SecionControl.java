@@ -1,9 +1,10 @@
 package control;
 
 import components.SecionPanel;
+import components.Header;
 import module.BotonTarea;
 import views.InicioSecion;
-import database.HistorialDataBase; // ← Importar la clase de historial
+import database.HistorialDataBase;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,12 +15,70 @@ public class SecionControl {
     private InicioSecion vista;
     private JFrame ventana;
     private JPanel panelTareas;
+    private Header header;
 
+    // Constructor modificado
+    public SecionControl(SecionPanel agenda, InicioSecion vista, JFrame ventana, String usuario) {
+        this.agenda = agenda;
+        this.vista = vista;
+        this.ventana = ventana;
+        
+        // SecionControl maneja toda la configuración
+        configurarInterfaz(usuario);
+        actualizarPanel();
+    }
+
+    // Constructor original (por si lo necesitas para compatibilidad)
     public SecionControl(SecionPanel agenda, InicioSecion vista, JFrame ventana, JPanel panelTareas) {
         this.agenda = agenda;
         this.vista = vista;
         this.ventana = ventana;
         this.panelTareas = panelTareas;
+    }
+
+    private void configurarInterfaz(String usuario) {
+        // Configurar ventana
+        ventana.getContentPane().setBackground(new Color(245, 245, 245));
+        
+        // Configurar header
+        configurarHeader(usuario);
+        
+        // Configurar panel de tareas
+        configurarPanelTareas();
+        
+        // Configurar botones
+        configurarBotones();
+    }
+
+    private void configurarHeader(String usuario) {
+        String textoDerecho = usuario.isEmpty() ? "Iniciar Sesión" : "Bienvenido, " + usuario;
+        header = new Header("Agenda de Tareas", textoDerecho);
+        ventana.add(header, BorderLayout.NORTH);
+    }
+
+    private void configurarPanelTareas() {
+        panelTareas = new JPanel();
+        panelTareas.setLayout(new BoxLayout(panelTareas, BoxLayout.Y_AXIS));
+        panelTareas.setBackground(new Color(245, 245, 245));
+        
+        JScrollPane scroll = new JScrollPane(panelTareas);
+        scroll.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        scroll.getVerticalScrollBar().setUnitIncrement(16);
+        ventana.add(scroll, BorderLayout.CENTER);
+    }
+
+    private void configurarBotones() {
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        JButton btnNueva = new JButton("+ Nueva Tarea");
+        btnNueva.setFont(new Font("Arial", Font.BOLD, 14));
+        btnNueva.setBackground(new Color(70, 130, 180));
+        btnNueva.setForeground(Color.WHITE);
+        btnNueva.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        
+        btnNueva.addActionListener(e -> accionNuevaTarea());
+        
+        panelBotones.add(btnNueva);
+        ventana.add(panelBotones, BorderLayout.SOUTH);
     }
 
     public void accionNuevaTarea() {
@@ -106,7 +165,8 @@ public class SecionControl {
         dialog.add(panelBotones, BorderLayout.SOUTH);
         dialog.setVisible(true);
     }
-private void guardarTarea(JDialog dialog, JTextField titulo, JTextArea descripcion, 
+
+    private void guardarTarea(JDialog dialog, JTextField titulo, JTextArea descripcion, 
                              JComboBox<String> comboPrioridad, JSpinner fechaSpinner, int indexEditar) {
         String t = titulo.getText().trim();
         String d = descripcion.getText().trim();
@@ -149,6 +209,8 @@ private void guardarTarea(JDialog dialog, JTextField titulo, JTextArea descripci
     }
 
     public void actualizarPanel() {
+        if (panelTareas == null) return;
+        
         panelTareas.removeAll();
 
         // Agregar botón de historial
